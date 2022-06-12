@@ -7,7 +7,7 @@ pd.set_option("display.width", None)
 FILES_DIR = os.getcwd()
 
 # data to use | used ICMarkets data
-path = "data/GBPUSD_M15.csv"
+path = "data/testing_GBPUSD_M15.csv"
 
 
 def main():
