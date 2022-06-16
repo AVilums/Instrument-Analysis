@@ -43,12 +43,6 @@ def rename_data(data):
     return data
 
 
-def drop_columns(df):
-    df.drop(columns=['open', 'high', 'low', 'close', 'spread', 'tick_vol', 'vol'], inplace=True)
-
-    return df
-
-
 def create_base_data():
     # create data path
     data_path = os.path.join(FILES_DIR, path)
