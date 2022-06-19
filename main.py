@@ -6,7 +6,6 @@ pd.set_option("display.width", None)
 FILES_DIR = os.getcwd()
 
 # data to use | used ICMarkets data
-# TODO - implement 5M data
 # TODO - check data for errors
 # path = "data/testing_GBPUSD_M15.csv"
 # path = "data/gbp.jpy/GBPJPY_M5_2005_2021.csv"
@@ -67,29 +66,38 @@ def plot_volatility_during_day_full():
     df = pd.DataFrame(data)
 
     # TODO - better formula for volatility
-    df['volatility'] = (df['high'] - df['low']) * 1000 / 2
+    df['volatility'] = (df['high'] - df['low']) * 100
 
     # redo dataframe with time & volatility
     df = df[['time', 'volatility']].copy()
 
-    time = df.loc[2:289, 'time']
+    # index from 00:00 till 23:55
+    time = df.loc[0:287, 'time']
     df = df.groupby(time).mean()
 
+    # remove index resulting in 2 separate columns
+    df = df.reset_index()
+
     # plot graph
-    ax = df.plot(title='Volatility during 24H',
+    ax = df.plot(x='time', y='volatility', title='Volatility during 24H',
+                 xlabel='time', ylabel='volatility index',
                  figsize=(16, 12), grid=True)
 
+    # Show Session times
+    ax.set(xticks=([26, 122, 182, 218, 287]))
+    ax.set(xticklabels= (['02:00', '10:00', '15:00', '18:00', '23:59']))
+
     # Tokyo open - close
-    ax.axvline(26, color='red', linestyle='-')
-    ax.axvline(121, color='red', linestyle='--')
+    ax.axvline(26, color='red', linestyle=':')
+    ax.axvline(122, color='red', linestyle='--')
 
     # London open - close
-    ax.axvline(122, color='blue', linestyle='-')
-    ax.axvline(218, color='blue', linestyle='--')
+    ax.axvline(122, color='blue', linestyle=':')
+    ax.axvline(218, color='blue', linestyle=':')
 
     # NY open - close
-    ax.axvline(182, color='green', linestyle='-')
-    ax.axvline(289, color='green', linestyle='--')
+    ax.axvline(182, color='green', linestyle=':')
+    ax.axvline(287, color='green', linestyle=':')
 
     plt.show()
 
